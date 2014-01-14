@@ -1,0 +1,3 @@
+[submodule "lib/elife-articles"]
+	path = lib/elife-articles
+	url = https://github.com/elifesciences/elife-articles.git
