@@ -1,5 +1,6 @@
 import json
 import xml.etree.ElementTree as ET
+from optparse import OptionParser
 
 def parse_tree(xml_file):
   return ET.parse(xml_file)
@@ -115,12 +116,35 @@ def debug_print(root):
     for c2 in child:
       print c2.tag, c2.attrib
       
-
+def get_all_files():
+  """
+  Return a list of all XML files
+  """
+  # Testing, return a few, not all
+  xml_files = []
+  xml_files.append("lib/elife-articles/elife00003.xml")
+  xml_files.append("lib/elife-articles/elife00534.xml")
+  xml_files.append("lib/elife-articles/elife00768.xml")
+  xml_files.append("lib/elife-articles/elife00778.xml")
+  xml_files.append("lib/elife-articles/elife00808.xml")
+  xml_files.append("lib/elife-articles/elife01273.xml")
+  xml_files.append("lib/elife-articles/elife01893.xml")
+  return xml_files
 
 if __name__ == '__main__':
 
-  xml_file = 'lib/elife-articles/elife00003.xml'
-  tree = parse_tree(xml_file)
-  root = tree_root(tree)
-  
-  debug_print(root)
+  parser = OptionParser()
+  parser.add_option("-f", "--file", default="lib/elife-articles/elife00003.xml", action="store", type="string", dest="file", help="Specify the XML file to parse")
+  parser.add_option("-a", "--all", default=None, action="store_true", dest="all", help="Parse all files")
+  (options, args) = parser.parse_args()
+  if options.all:
+    xml_files = get_all_files()
+  elif options.file:
+    xml_files = []
+    xml_files.append(options.file)
+    
+  for f in xml_files:
+    tree = parse_tree(f)
+    root = tree_root(tree)
+    
+    debug_print(root)
