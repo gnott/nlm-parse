@@ -158,16 +158,16 @@ def get_all_files():
 
 if __name__ == '__main__':
 
-    Parser = OptionParser()
-    Parser.add_option("-f", "--file",
+    parser = OptionParser()
+    parser.add_option("-f", "--file",
                       default="lib/elife-articles/elife00003.xml",
                       action="store", type="string", dest="file",
                       help="Specify the XML file to parse")
-    Parser.add_option("-a", "--all",
+    parser.add_option("-a", "--all",
                       default=None,
                       action="store_true", dest="all",
                       help="Parse all files")
-    (options, args) = Parser.parse_args()
+    (options, args) = parser.parse_args()
     if options.all:
         xml_files = get_all_files()
     elif options.file:
