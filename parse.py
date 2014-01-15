@@ -60,6 +60,19 @@ def parse_article_meta(root):
 
   return abstract, article_categories, article_id, author_notes, contrib_group, custom_meta_group, elocation_id, funding_group, history, kwd_group, permissions, pub_date, related_article, self_uri, title_group, volume
   
+def parse_date(root):
+  """
+  date sub Elements
+  """
+  
+  day = month = year = None
+  
+  day = root.find('day')
+  month = root.find('month')
+  year = root.find('year')
+  
+  return day, month, year
+  
 def parse_history(root):
   """
   history sub Elements
@@ -98,15 +111,25 @@ def debug_print(root):
   
   abstract, article_categories, article_id, author_notes, contrib_group, custom_meta_group, elocation_id, funding_group, history, kwd_group, permissions, pub_date, related_article, self_uri, title_group, volume = parse_article_meta(article_meta)
   
+  print "\nChildren of article-meta pub-date: "
+  for child in pub_date:
+    print "\npub-date pub-type = " + child.attrib["pub-type"]
+    day, month, year = parse_date(child)
+    for elem in day, month, year:
+      if elem is not None:
+        print elem.tag + " = " + elem.text
+  
   print "\nChildren of history: "
   print "List length: " + str(len(history)) + "\n"
   for child in history:
     date = parse_history(child)
     print "\nChildren of date: "
     print "List length: " + str(len(date)) + "\n"
-    for c2 in date:
-      print c2.tag, c2.attrib
-  
+    print "\nhistory date date-type = " + date.attrib["date-type"]
+    day, month, year = parse_date(date)
+    for elem in day, month, year:
+      if elem is not None:
+        print elem.tag + " = " + elem.text
 
   # sub-article
   print "\nChildren of sub-article: "
