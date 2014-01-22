@@ -175,9 +175,9 @@ def debug_print(root):
         print "\n" + "id = " + child.attrib["id"]
         (funding_source, award_id,
          principal_award_recipient) = parse_award_group(child)
-        if funding_source:
+        if funding_source is not None:
             print "funding-source = " + funding_source.text
-        if award_id:
+        if award_id is not None:
             print "award-id = " + str(award_id.text)
         for name in principal_award_recipient:
             print "principal-award-recipient:"
