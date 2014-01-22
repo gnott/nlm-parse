@@ -58,6 +58,16 @@ def parse_article_meta(root):
             funding_group, history, kwd_group, permissions,
             pub_date, related_article, self_uri, title_group, volume)
 
+def parse_name(root):
+    """
+    name sub Elements
+    """
+
+    surname = root.find('surname')
+    given_names = root.find('given-names')
+
+    return surname, given_names
+
 def parse_date(root):
     """
     date sub Elements
@@ -76,6 +86,27 @@ def parse_history(root):
 
     date = root.find('date')
     return date
+
+def parse_funding_group(root):
+    """
+    funding-group sub Elements
+    """
+
+    award_group = root.findall('award-group')
+    funding_statement = root.findall('funding-statement')
+
+    return award_group, funding_statement
+
+def parse_award_group(root):
+    """
+    funding-group award-group sub Elements
+    """
+    
+    funding_source = root.find('funding-source')
+    award_id = root.find('award-id')
+    principal_award_recipient = root.find('principal-award-recipient')
+
+    return funding_source, award_id, principal_award_recipient
 
 def debug_print(root):
     """
@@ -132,6 +163,27 @@ def debug_print(root):
         for elem in day, month, year:
             if elem is not None:
                 print elem.tag + " = " + elem.text
+
+    print "\nChildren of article-meta funding-group: "
+    for child in funding_group:
+        for c2 in child:
+            print c2.tag, c2.attrib
+    award_group, funding_statement = parse_funding_group(child)
+    for child in funding_statement:
+        print child.text
+    for child in award_group:
+        print "\n" + "id = " + child.attrib["id"]
+        (funding_source, award_id,
+         principal_award_recipient) = parse_award_group(child)
+        if funding_source:
+            print "funding-source = " + funding_source.text
+        if award_id:
+            print "award-id = " + str(award_id.text)
+        for name in principal_award_recipient:
+            print "principal-award-recipient:"
+            surname, given_names = parse_name(name)
+            print "  surname = " + surname.text
+            print "  given-names = " + str(given_names.text)
 
     # sub-article
     print "\nChildren of sub-article: "
